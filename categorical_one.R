@@ -106,12 +106,15 @@ server <- function(input, output,session) {
     
     plotdata<-rbind( {input$save
       loadData()})
-    # print(plotdata)
-    
-    
     
     if (is.null(plotdata$category)==F & is.null(plotdata$count)==F){
-      ggplot(data=plotdata, aes(x=category, y=as.numeric(count))) +
+      
+      var<- as.vector(t(plotdata[1]))
+      value<- as.numeric(as.vector(t(plotdata[2])))
+      mydata<-data.frame(var,value)
+      
+      
+      ggplot(data=mydata, aes(x=var, y=value)) +
         geom_bar(stat="identity", fill="steelblue")+
         theme_minimal()+labs(title=paste("Bar Plot of", input[[fields[1]]], sep=" "),
                              x ="Category", y = "Frequency counts")
@@ -124,10 +127,13 @@ server <- function(input, output,session) {
     plotdata2<-rbind( {input$save
       loadData()})
     
-    
     if (is.null(plotdata2$category)==F & is.null(plotdata2$count)==F){
       
-      ggplot(data=plotdata2, aes(x=0, y=as.numeric(count), fill=category))+
+      var<- as.vector(t(plotdata2[1]))
+      value<- as.numeric(as.vector(t(plotdata2[2])))
+      mydata<-data.frame(var,value)
+      
+      ggplot(data=mydata, aes(x=0, y=value, fill=var))+
         geom_bar(width = 1, stat = "identity") + coord_polar("y", start=0)+
         scale_fill_brewer(palette="Blues")+
         theme(axis.text.x=element_blank(), axis.text.y=element_blank(),panel.background = element_blank())+
